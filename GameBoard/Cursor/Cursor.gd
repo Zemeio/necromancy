@@ -41,6 +41,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not should_move:
 		return
 
+	var was_moved_by_keyboard = true
 	# Moves the cursor by one grid cell.
 	if event.is_action("ui_right"):
 		self.cell += Vector2.RIGHT
@@ -50,6 +51,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		self.cell += Vector2.LEFT
 	elif event.is_action("ui_down"):
 		self.cell += Vector2.DOWN
+	else:
+		was_moved_by_keyboard = false
+
+	if was_moved_by_keyboard:
+		get_viewport().warp_mouse(grid.calculate_map_position(self.cell))
 
 
 func _draw() -> void:
