@@ -16,6 +16,7 @@ var _walkable_cells := []
 
 onready var _unit_overlay: UnitOverlay = $UnitOverlay
 onready var _unit_path: UnitPath = $UnitPath
+onready var _characters = $Characters
 
 
 func _ready() -> void:
@@ -49,11 +50,15 @@ func get_walkable_cells(unit: Unit) -> Array:
 func _reinitialize() -> void:
 	_units.clear()
 
-	for child in get_children():
-		var unit := child as Unit
-		if not unit:
-			continue
-		_units[unit.cell] = unit
+	for child in _characters.get_children():
+		var character := child as Character
+		if not character: continue
+		var units = character.get_node("BoardUnits").get_children()
+		for unit_child in units:
+			var unit := unit_child as Unit
+			if not unit:
+				continue
+			_units[unit.cell] = unit
 
 
 ## Returns an array with all the coordinates of walkable cells based on the `max_distance`.

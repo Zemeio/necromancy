@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Units/Unit.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/Character/Character.gd" type="Script" id=2]
+[ext_resource path="res://Units/bear.png" type="Texture" id=3]
+
+[node name="Character" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="BoardUnits" type="Node" parent="."]
+
+[node name="Normal" parent="BoardUnits" instance=ExtResource( 1 )]
+visible = false
+skin = ExtResource( 3 )
+skin_offset = Vector2( 2, 9 )
