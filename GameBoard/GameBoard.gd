@@ -12,11 +12,21 @@ export var grid: Resource
 ## Mapping of coordinates of a cell to a reference to the unit it contains.
 var _units := {}
 var _active_unit: Unit
-var _walkable_cells := []
+var _targetable_cells := []
 
 onready var _unit_overlay: UnitOverlay = $UnitOverlay
 onready var _unit_path: UnitPath = $UnitPath
 onready var _characters = $Characters
+onready var _attack_button = $UI/Attack
+
+
+enum Action {
+	attack
+	move
+	nop
+}
+
+onready var selected_action = Action.move
 
 
 func _ready() -> void:
@@ -43,7 +53,12 @@ func is_occupied(cell: Vector2) -> bool:
 
 ## Returns an array of cells a given unit can walk using the flood fill algorithm.
 func get_walkable_cells(unit: Unit) -> Array:
-	return _flood_fill(unit.cell, unit.move_range)
+	return [unit.cell] + _flood_fill(unit.cell, unit.move_range)["empty_cells"]
+
+
+## Returns an array of cells a given unit can attack using the flood fill algorithm.
+func get_attackable_cells(unit: Unit, attack: Attack) -> Array:
+	return _flood_fill(unit.cell, attack.attack_range)["all_cells"]
 
 
 ## Clears, and refills the `_units` dictionary with game objects that are on the board.
@@ -62,14 +77,16 @@ func _reinitialize() -> void:
 
 
 ## Returns an array with all the coordinates of walkable cells based on the `max_distance`.
-func _flood_fill(cell: Vector2, max_distance: int) -> Array:
-	var array := []
+func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> Dictionary:
+	var all_cells := []
+	var empty_cells := []
+	var occupied_cells := []
 	var stack := [cell]
 	while not stack.empty():
 		var current = stack.pop_back()
 		if not grid.is_within_bounds(current):
 			continue
-		if current in array:
+		if current in all_cells:
 			continue
 
 		var difference: Vector2 = (current - cell).abs()
@@ -77,21 +94,33 @@ func _flood_fill(cell: Vector2, max_distance: int) -> Array:
 		if distance > max_distance:
 			continue
 
-		array.append(current)
+		all_cells.append(current)
+		if is_occupied(current):
+			occupied_cells.append(current)
+		else:
+			empty_cells.append(current)
 		for direction in DIRECTIONS:
 			var coordinates: Vector2 = current + direction
 			if is_occupied(coordinates):
-				continue
-			if coordinates in array:
+				if not ignore_obstacles:
+					continue
+			if coordinates in all_cells:
 				continue
 
 			stack.append(coordinates)
-	return array
+	return {
+		all_cells = all_cells,
+		empty_cells = empty_cells,
+		occupied_cells = occupied_cells
+	}
 
 
 ## Updates the _units dictionary with the target position for the unit and asks the _active_unit to walk to it.
 func _move_active_unit(new_cell: Vector2) -> void:
-	if is_occupied(new_cell) or not new_cell in _walkable_cells:
+	if not selected_action == Action.move:
+		return
+
+	if is_occupied(new_cell) or not new_cell in _targetable_cells:
 		return
 	# warning-ignore:return_value_discarded
 	_units.erase(_active_unit.cell)
@@ -110,9 +139,11 @@ func _select_unit(cell: Vector2) -> void:
 
 	_active_unit = _units[cell]
 	_active_unit.is_selected = true
-	_walkable_cells = get_walkable_cells(_active_unit)
-	_unit_overlay.draw(_walkable_cells)
-	_unit_path.initialize(_walkable_cells)
+	_targetable_cells = get_walkable_cells(_active_unit)
+	_unit_overlay.draw(_targetable_cells)
+	_unit_path.initialize(_targetable_cells)
+	_attack_button.disabled = false
+	selected_action = Action.move
 
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
@@ -125,7 +156,9 @@ func _deselect_active_unit() -> void:
 ## Clears the reference to the _active_unit and the corresponding walkable cells.
 func _clear_active_unit() -> void:
 	_active_unit = null
-	_walkable_cells.clear()
+	_targetable_cells.clear()
+	selected_action = Action.nop
+	_attack_button.disabled = true
 
 
 ## Selects or moves a unit based on where the cursor is.
@@ -140,3 +173,12 @@ func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 func _on_Cursor_moved(new_cell: Vector2) -> void:
 	if _active_unit and _active_unit.is_selected:
 		_unit_path.draw(_active_unit.cell, new_cell)
+
+
+func _on_Attack_pressed():
+	if not _active_unit:
+		return
+	
+	_targetable_cells = get_attackable_cells(_active_unit, _active_unit.UnitInfo.main_attack)
+	_unit_overlay.draw(_targetable_cells)
+	selected_action = Action.attack

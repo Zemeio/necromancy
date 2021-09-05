@@ -8,27 +8,12 @@ extends "res://Scripts/Character/Character.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	MAXHP = 100
-	CURHP = 100
-	FACTION = 1
-	ATK = 25
-	UNDEAD = true
 	pass # Replace with function body.
 
 func Damage(var dmg, var type): #Chamada para calcular o dano recebido pela unidade por um ataque inimigo
 	#É chamada pela função Attack de outro personagem, recebendo como parâmetro o tipo elemental do ataque (Físico, Fogo ou Elétrico)
 	#Calcula o dano com base nas resistências elementais e dano recebido (podemos adicionar mais tipos elementais e defesas depois). 
 	#escrever fórmula que calcula o dano recebido com base no tipo do dano e dmg (Físico, Fogo, Elétrico)
-	var t1 = 0
-	var t2 = 0
-	var t3 = 0
-	if type == 1:
-		t1 = 1
-	if type == 2:
-		t2 = 1
-	if type == 3:
-		t3 = 0
-	CURHP = CURHP - (dmg * t1) - (dmg * t2) - (dmg * t3)
 	pass
 	
 func Attack(): #Uma das ações básicas de cada personagem. Executa um ataque simples em um oponente com base nas características do personagem.

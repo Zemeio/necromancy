@@ -1,0 +1,49 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://GameBoard/GameBoard.gd" type="Script" id=4]
+[ext_resource path="res://GameBoard/Grid.tres" type="Resource" id=8]
+[ext_resource path="res://GameBoard/Cursor/Cursor.tscn" type="PackedScene" id=11]
+[ext_resource path="res://GameBoard/UnitPath.tscn" type="PackedScene" id=12]
+[ext_resource path="res://UnitOverlay/UnitOverlay.tscn" type="PackedScene" id=13]
+
+[sub_resource type="Theme" id=1]
+
+[node name="GameBoard" type="YSort"]
+script = ExtResource( 4 )
+grid = ExtResource( 8 )
+
+[node name="UnitOverlay" parent="." instance=ExtResource( 13 )]
+
+[node name="UnitPath" parent="." instance=ExtResource( 12 )]
+tile_data = PoolIntArray(  )
+
+[node name="Cursor" parent="." instance=ExtResource( 11 )]
+
+[node name="Characters" type="Node2D" parent="."]
+
+[node name="UI" type="Control" parent="."]
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Attack" type="Button" parent="UI"]
+margin_left = 1086.0
+margin_top = 3.0
+margin_right = 1262.0
+margin_bottom = 62.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 1 )
+disabled = true
+shortcut_in_tooltip = false
+text = "Attack"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="accept_pressed" from="Cursor" to="." method="_on_Cursor_accept_pressed"]
+[connection signal="moved" from="Cursor" to="." method="_on_Cursor_moved"]
+[connection signal="pressed" from="UI/Attack" to="." method="_on_Attack_pressed"]

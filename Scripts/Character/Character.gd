@@ -1,18 +1,13 @@
 class_name Character
 extends Node
 
-export var MAXHP = 100 #O valor máximo de HP do personagem
-var CURHP #O valor atual de HP do personagem
-var ATK   #O dano que o personagem dá em um ataque comum
-var FACTION #A Facção do personagem. 1 é aliado, 2 é inimigo e 3 é neutro.
-var UNDEAD #Booleano. Determina se o personagem é um morto vivo, e, portanto, controlável pelo necromante. 
-#var POS posição do personagem no mapa
-#var MP controla a quantidade de magia que um personagem pode usar
+export var CharacterInfo: Resource
 
+onready var _normalUnit = $BoardUnits/Normal
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	_normalUnit.UnitInfo = CharacterInfo
 
 func damage(var dmg, var type): #Chamada para calcular o dano recebido pela unidade por um ataque inimigo
 	#É chamada pela função Attack de outro personagem, recebendo como parâmetro o tipo elemental do ataque (Físico, Fogo ou Elétrico)
