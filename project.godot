@@ -44,6 +44,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://GameBoard/Pathfinder.gd"
 }, {
+"base": "Object",
+"class": "TurnAction",
+"language": "GDScript",
+"path": "res://Scripts/GameBoard/TurnOrder/TurnAction.gd"
+}, {
 "base": "Path2D",
 "class": "Unit",
 "language": "GDScript",
@@ -67,6 +72,7 @@ _global_script_class_icons={
 "GameBoard": "",
 "Grid": "",
 "PathFinder": "",
+"TurnAction": "",
 "Unit": "",
 "UnitOverlay": "",
 "UnitPath": ""

@@ -19,6 +19,7 @@ export var skin_offset := Vector2.ZERO setget set_skin_offset
 ## The unit's move speed when it's moving along a path.
 export var move_speed := 600.0
 ## Gameplay info for the unit
+## UnitInfo is the generic name. For character we have CharaterInfo.
 export var UnitInfo: Resource
 
 ## Coordinates of the current cell the cursor moved to.

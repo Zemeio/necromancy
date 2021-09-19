@@ -12,3 +12,5 @@ var UNDEAD #Booleano. Determina se o personagem é um morto vivo, e, portanto, c
 
 # type: Attack
 export var main_attack: Resource
+
+export var act_speed := 5

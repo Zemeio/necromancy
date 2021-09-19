@@ -17,7 +17,7 @@ var _targetable_cells := []
 onready var _unit_overlay: UnitOverlay = $UnitOverlay
 onready var _unit_path: UnitPath = $UnitPath
 onready var _characters = $Characters
-onready var _attack_button = $UI/Attack
+onready var _attack_button = $Action/Attack
 
 
 enum Action {
