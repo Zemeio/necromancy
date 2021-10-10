@@ -48,6 +48,7 @@ func _get_configuration_warning() -> String:
 
 ## Returns `true` if the cell is occupied by a unit.
 func is_occupied(cell: Vector2) -> bool:
+	# TODO: Improve here to check if you can actually pass through the unit in this cell
 	return _units.has(cell)
 
 
@@ -58,7 +59,8 @@ func get_walkable_cells(unit: Unit) -> Array:
 
 ## Returns an array of cells a given unit can attack using the flood fill algorithm.
 func get_attackable_cells(unit: Unit, attack: Attack) -> Array:
-	return _flood_fill(unit.cell, attack.attack_range)["all_cells"]
+	# Occupied cells does not return the origin. If it did, it could be filtered here.
+	return _flood_fill(unit.cell, attack.attack_range, true)["occupied_cells"]
 
 
 ## Clears, and refills the `_units` dictionary with game objects that are on the board.
@@ -95,7 +97,7 @@ func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> 
 			continue
 
 		all_cells.append(current)
-		if is_occupied(current):
+		if is_occupied(current) and current != cell:
 			occupied_cells.append(current)
 		else:
 			empty_cells.append(current)
@@ -111,7 +113,8 @@ func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> 
 	return {
 		all_cells = all_cells,
 		empty_cells = empty_cells,
-		occupied_cells = occupied_cells
+		occupied_cells = occupied_cells,
+		origin_cell = cell,
 	}
 
 
@@ -140,7 +143,7 @@ func _select_unit(cell: Vector2) -> void:
 	_active_unit = _units[cell]
 	_active_unit.is_selected = true
 	_targetable_cells = get_walkable_cells(_active_unit)
-	_unit_overlay.draw(_targetable_cells)
+	_unit_overlay.draw(_targetable_cells, _unit_overlay.TILE_TYPE.MOVE)
 	_unit_path.initialize(_targetable_cells)
 	_attack_button.disabled = false
 	selected_action = Action.move
@@ -180,5 +183,5 @@ func _on_Attack_pressed():
 		return
 	
 	_targetable_cells = get_attackable_cells(_active_unit, _active_unit.UnitInfo.main_attack)
-	_unit_overlay.draw(_targetable_cells)
+	_unit_overlay.draw(_targetable_cells, _unit_overlay.TILE_TYPE.ATTACK)
 	selected_action = Action.attack
