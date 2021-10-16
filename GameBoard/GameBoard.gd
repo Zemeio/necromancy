@@ -49,17 +49,20 @@ func _get_configuration_warning() -> String:
 
 ## Returns `true` if the cell is occupied by a unit.
 func is_occupied(cell: Vector2) -> bool:
+	# Map Control
 	# TODO: Improve here to check if you can actually pass through the unit in this cell
 	return _units.has(cell)
 
 
 ## Returns an array of cells a given unit can walk using the flood fill algorithm.
 func get_walkable_cells(unit: Unit) -> Array:
+	# Map Control
 	return [unit.cell] + _flood_fill(unit.cell, unit.move_range)["empty_cells"]
 
 
 ## Returns an array of cells a given unit can attack using the flood fill algorithm.
 func get_attackable_cells(unit: Unit, attack: Attack) -> Array:
+	# Map Control
 	# Occupied cells does not return the origin. If it did, it could be filtered here.
 	return _flood_fill(unit.cell, attack.attack_range, true)["occupied_cells"]
 
@@ -78,10 +81,17 @@ func _reinitialize() -> void:
 				continue
 			_units[unit.cell] = unit
 			_turn_order.addCharacterTurn(unit)
+			
+#	for child in _characters.get_children():
+#		character = mapControl.createCharacterUnit(child)
+#		if character:
+#			characterManager.addCharacterData(character)
+#			turnOrder.addCharacterTurn(character)
 
 
 ## Returns an array with all the coordinates of walkable cells based on the `max_distance`.
 func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> Dictionary:
+	# Map Control
 	var all_cells := []
 	var empty_cells := []
 	var occupied_cells := []
@@ -122,6 +132,7 @@ func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> 
 
 ## Updates the _units dictionary with the target position for the unit and asks the _active_unit to walk to it.
 func _move_active_unit(new_cell: Vector2) -> void:
+	# Map Control
 	if not selected_action == Action.move:
 		return
 
@@ -139,6 +150,7 @@ func _move_active_unit(new_cell: Vector2) -> void:
 ## Selects the unit in the `cell` if there's one there.
 ## Sets it as the `_active_unit` and draws its walkable cells and interactive move path. 
 func _select_unit(cell: Vector2) -> void:
+	# Map Control
 	if not _units.has(cell):
 		return
 
@@ -153,6 +165,7 @@ func _select_unit(cell: Vector2) -> void:
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
 func _deselect_active_unit() -> void:
+	# Map Control
 	_active_unit.is_selected = false
 	_unit_overlay.clear()
 	_unit_path.stop()
@@ -160,6 +173,7 @@ func _deselect_active_unit() -> void:
 
 ## Clears the reference to the _active_unit and the corresponding walkable cells.
 func _clear_active_unit() -> void:
+	# Map Control
 	_active_unit = null
 	_targetable_cells.clear()
 	selected_action = Action.nop
@@ -168,6 +182,7 @@ func _clear_active_unit() -> void:
 
 ## Selects or moves a unit based on where the cursor is.
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
+	# Map Control
 	if not _active_unit:
 		_select_unit(cell)
 	elif _active_unit.is_selected:
@@ -176,11 +191,13 @@ func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 
 ## Updates the interactive path's drawing if there's an active and selected unit.
 func _on_Cursor_moved(new_cell: Vector2) -> void:
+	# Map Control
 	if _active_unit and _active_unit.is_selected:
 		_unit_path.draw(_active_unit.cell, new_cell)
 
 
 func _on_Attack_pressed():
+	# Map Control
 	if not _active_unit:
 		return
 	
