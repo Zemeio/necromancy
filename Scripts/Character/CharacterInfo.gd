@@ -11,7 +11,9 @@ var UNDEAD #Booleano. Determina se o personagem é um morto vivo, e, portanto, c
 #var POS posição do personagem no mapa
 #var MP controla a quantidade de magia que um personagem pode usar
 
+const dummy_attack = preload("res://Scripts/Character/Attacks/dummy_attack.tres")
+
 # type: Attack
-export var main_attack: Resource
+export var main_attack: Resource = dummy_attack
 
 export var act_speed := 5
