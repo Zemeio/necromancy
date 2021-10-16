@@ -1,9 +1,14 @@
 class_name TurnAction
 extends Object
 
+
+const TURN_TYPE_CHARACTER_TURN = "CharacterTurn"
+
+
 ## Identifiers
 var name := "MyAction"
 var id: String = ""
+var turnType: String = ""
 
 ## Targeting
 var target := Unit

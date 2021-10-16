@@ -2,6 +2,7 @@ class_name CharacterInfo
 extends Resource
 
 
+export var Name = ""
 export var MAXHP = 100 #O valor máximo de HP do personagem
 var CURHP #O valor atual de HP do personagem
 var ATK   #O dano que o personagem dá em um ataque comum

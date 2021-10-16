@@ -5,6 +5,7 @@
 
 [resource]
 script = ExtResource( 1 )
+Name = ""
 MAXHP = 100
 main_attack = ExtResource( 2 )
 act_speed = 5

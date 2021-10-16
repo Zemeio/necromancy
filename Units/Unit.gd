@@ -99,3 +99,6 @@ func set_skin_offset(value: Vector2) -> void:
 func _set_is_walking(value: bool) -> void:
 	_is_walking = value
 	set_process(_is_walking)
+
+func getName() -> String:
+	return UnitInfo.Name

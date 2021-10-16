@@ -6,15 +6,6 @@ onready var actionList := []
 var _action_reference = {}
 
 
-func _ready():
-	## TODO: Remove this ready, it is just for testing
-	var turnAction = TurnAction.new()
-	turnAction.should_show_in_ui = false
-	turnAction.id = "myid"
-	_add_action(turnAction)
-	_update_ui()
-
-
 func _add_action(action: TurnAction):
 	if typeof(action) != typeof(TurnAction):
 		print("Action is not of type TurnAction!")
@@ -24,6 +15,16 @@ func _add_action(action: TurnAction):
 	actionList.append(
 		action
 	)
+
+
+func addCharacterTurn(unit: Unit):
+	var turnAction = TurnAction.new()
+	turnAction.should_show_in_ui = true
+	turnAction.turnType = TurnAction.TURN_TYPE_CHARACTER_TURN
+	turnAction.name = unit.getName()
+	turnAction.source = unit
+	_add_action(turnAction)
+	_update_ui()
 
 
 func _update_ui():

@@ -18,6 +18,7 @@ onready var _unit_overlay: UnitOverlay = $UnitOverlay
 onready var _unit_path: UnitPath = $UnitPath
 onready var _characters = $Characters
 onready var _attack_button = $Action/Attack
+onready var _turn_order = $TurnOrder
 
 
 enum Action {
@@ -76,6 +77,7 @@ func _reinitialize() -> void:
 			if not unit:
 				continue
 			_units[unit.cell] = unit
+			_turn_order.addCharacterTurn(unit)
 
 
 ## Returns an array with all the coordinates of walkable cells based on the `max_distance`.
