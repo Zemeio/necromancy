@@ -184,4 +184,5 @@ func _on_Attack_pressed():
 	
 	_targetable_cells = get_attackable_cells(_active_unit, _active_unit.UnitInfo.main_attack)
 	_unit_overlay.draw(_targetable_cells, _unit_overlay.TILE_TYPE.ATTACK)
+	_unit_path.initialize([_active_unit.cell] + _targetable_cells)
 	selected_action = Action.attack
