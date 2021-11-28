@@ -27,6 +27,11 @@ func addCharacterTurn(unit: Unit):
 	_update_ui()
 
 
+func initialize(units):
+	for unit in units:
+		addCharacterTurn(unit)
+
+
 func _update_ui():
 	itemListWindow.clear()
 	for action in actionList:
