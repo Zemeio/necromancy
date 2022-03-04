@@ -118,7 +118,7 @@ func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> 
 
 
 ## Updates the _units dictionary with the target position for the unit and asks the _active_unit to walk to it.
-func _move_unit(unit, new_cell: Vector2) -> void:
+func _move_unit(unit: Unit, new_cell: Vector2) -> void:
 	# Map Control
 	if not selected_action == Action.move:
 		return
@@ -144,8 +144,9 @@ func _move_unit(unit, new_cell: Vector2) -> void:
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 	# Map Control
 	if not _characters.has_active_unit():
-		_characters.select_unit_on_cell(cell)
-		_enter_move_action_for_unit(_characters.get_active_unit())
+		var selected_unit = _characters.select_unit_on_cell(cell)
+		if selected_unit != null:
+			_enter_move_action_for_unit(selected_unit)
 	elif _characters.active_unit_is_selected():
 		_move_unit(_characters.get_active_unit(), cell)
 

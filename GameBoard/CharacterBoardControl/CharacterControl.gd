@@ -43,10 +43,11 @@ func active_unit_is_selected():
 func select_unit_on_cell(cell: Vector2):
 	if not _units.has(cell):
 		print("Tried to select unit on cell " + str(cell) + ", but no unit is located there.")
-		return
+		return null
 
 	_active_unit = _units[cell]
 	_active_unit.is_selected = true
+	return _active_unit
 
 
 ## Deselects the active unit, clearing the cells overlay and interactive path drawing.
