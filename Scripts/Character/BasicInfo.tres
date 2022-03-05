@@ -9,3 +9,4 @@ Name = ""
 MAXHP = 100
 main_attack = ExtResource( 2 )
 act_speed = 5
+_debug_wait = 90
