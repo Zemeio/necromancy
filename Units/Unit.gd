@@ -102,3 +102,6 @@ func _set_is_walking(value: bool) -> void:
 
 func getName() -> String:
 	return UnitInfo.Name
+
+func get_speed() -> String:
+	return UnitInfo.act_speed
