@@ -62,9 +62,6 @@ func _calculate_turn_order(units: Array) -> Array:
 	turn_order += remaining_units
 	return turn_order
 
-	# Predict future actions
-	# TODO: implement predict future actions
-
 func _calculate_next_action(remaining_units, waits_per_speed):
 	# Return units that can act now, in the order resolved by the tiebreaker
 	var units_that_can_act = _find_units_that_can_act_now(waits_per_speed)
