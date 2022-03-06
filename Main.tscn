@@ -13,14 +13,16 @@ script = ExtResource( 3 )
 Name = "Necromancer"
 MAXHP = 100
 main_attack = ExtResource( 4 )
-act_speed = 5
+act_speed = 10
+_debug_wait = 90
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 3 )
 Name = "Skeleton"
 MAXHP = 100
 main_attack = ExtResource( 4 )
-act_speed = 5
+act_speed = 9
+_debug_wait = 90
 
 [node name="Main" type="Node2D"]
 
@@ -36,7 +38,7 @@ CharacterInfo = SubResource( 1 )
 
 [node name="Normal" parent="GameBoard/Characters/Necromancer/BoardUnits" index="0"]
 visible = true
-position = Vector2( 620, 496 )
+position = Vector2( 620, 497 )
 
 [node name="Skeleton" parent="GameBoard/Characters" index="1" instance=ExtResource( 2 )]
 position = Vector2( 336, 383 )

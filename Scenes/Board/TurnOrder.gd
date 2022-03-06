@@ -52,30 +52,35 @@ func _calculate_turn_order(units: Array) -> Array:
 	_initialize_non_initialized_units(units)
 
 	var remaining_units := units.duplicate(false)
-	# Calculate next action
-	var next_action: Array = _calculate_next_action(remaining_units)
-	return next_action
+	var turn_order := []
+	while remaining_units.size() > 1:
+		var waits_per_speed = _calculate_waits_per_speed(remaining_units, _unit_attributes)
+		var next_action: Array = _calculate_next_action(remaining_units, waits_per_speed)
+		for action in next_action:
+			turn_order.append(action)
+			remaining_units.remove(remaining_units.find(action))
+	turn_order += remaining_units
+	return turn_order
 
 	# Predict future actions
 	# TODO: implement predict future actions
 
-func _calculate_next_action(remaining_units):
+func _calculate_next_action(remaining_units, waits_per_speed):
 	# Return units that can act now, in the order resolved by the tiebreaker
-	var waits_per_speed = _calculate_waits_per_speed(remaining_units)
 	var units_that_can_act = _find_units_that_can_act_now(waits_per_speed)
 	units_that_can_act = _resolve_tiebreakers(units_that_can_act, waits_per_speed)
 	return units_that_can_act
 
-func _calculate_waits_per_speed(units):
+func _calculate_waits_per_speed(units, attrs):
 	var smallest_tick = 100 # 100 is the biggest value of wait/speed
 	for unit in units:
-		var units_tick_until_0 = ceil(float(_unit_attributes[unit]["wait"]) / unit.get_speed())
+		var units_tick_until_0 = ceil(float(attrs[unit]["wait"]) / unit.get_speed())
 		if units_tick_until_0 < smallest_tick:
 			smallest_tick = units_tick_until_0
 	
 	var waits_per_speed := {}
 	for unit in units:
-		waits_per_speed[unit] = _unit_attributes[unit]["wait"] - (unit.get_speed()*smallest_tick)
+		waits_per_speed[unit] = attrs[unit]["wait"] - (unit.get_speed()*smallest_tick)
 	
 	return waits_per_speed
 
