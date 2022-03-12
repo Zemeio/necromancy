@@ -17,3 +17,5 @@ const dummy_attack = preload("res://Scripts/Character/Attacks/dummy_attack.tres"
 export var main_attack: Resource = dummy_attack
 
 export var act_speed := 5
+
+export var _debug_wait = 90
