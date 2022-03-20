@@ -5,8 +5,8 @@
 
 [resource]
 script = ExtResource( 1 )
-Name = ""
+Name = "Skeleton2"
 MAXHP = 100
 main_attack = ExtResource( 2 )
-act_speed = 5
+act_speed = 11
 _debug_wait = 90

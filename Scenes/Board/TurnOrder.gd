@@ -1,5 +1,5 @@
 extends Node2D
-
+class_name TurnOrder
 
 onready var itemListWindow = $ItemListWindow
 onready var actionList := []
@@ -48,6 +48,15 @@ func initialize(units):
 		addCharacterTurn(unit)
 
 
+func current() -> Unit:
+	if actionList.empty():
+		var waits_per_speed := _calculate_waits_per_speed(_unit_attributes.keys(), _unit_attributes)
+		var next_action = _calculate_next_action(waits_per_speed)
+		_unit_attributes = waits_per_speed
+		actionList = next_action
+	return actionList.front().source
+
+
 func _calculate_turn_order(units: Array) -> Array:
 	_initialize_non_initialized_units(units)
 
@@ -55,20 +64,20 @@ func _calculate_turn_order(units: Array) -> Array:
 	var turn_order := []
 	while remaining_units.size() > 1:
 		var waits_per_speed = _calculate_waits_per_speed(remaining_units, _unit_attributes)
-		var next_action: Array = _calculate_next_action(remaining_units, waits_per_speed)
+		var next_action: Array = _calculate_next_action(waits_per_speed)
 		for action in next_action:
 			turn_order.append(action)
 			remaining_units.remove(remaining_units.find(action))
 	turn_order += remaining_units
 	return turn_order
 
-func _calculate_next_action(remaining_units, waits_per_speed):
+func _calculate_next_action(waits_per_speed):
 	# Return units that can act now, in the order resolved by the tiebreaker
 	var units_that_can_act = _find_units_that_can_act_now(waits_per_speed)
 	units_that_can_act = _resolve_tiebreakers(units_that_can_act, waits_per_speed)
 	return units_that_can_act
 
-func _calculate_waits_per_speed(units, attrs):
+func _calculate_waits_per_speed(units, attrs) -> Dictionary:
 	var smallest_tick = 100 # 100 is the biggest value of wait/speed
 	for unit in units:
 		var units_tick_until_0 = ceil(float(attrs[unit]["wait"]) / unit.get_speed())
@@ -171,7 +180,7 @@ class TiebreakerSpeed extends Tiebreaker:
 		for unit in group:
 			var unit_speed = -unit.get_speed() # Uses negative because priority is from top to bottom
 			if not unit_speed in grouped_per_speed:
-				grouped_per_speed[unit_speed] = [] 
+				grouped_per_speed[unit_speed] = []
 			grouped_per_speed[unit_speed].append(unit)
 		return grouped_per_speed
 

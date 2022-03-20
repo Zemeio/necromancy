@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://Scenes/Board/TurnOrder.gd" type="Script" id=1]
+[ext_resource path="res://GameBoard/CharacterBoardControl/CharacterControl.gd" type="Script" id=2]
 [ext_resource path="res://GameBoard/GameBoard.gd" type="Script" id=4]
 [ext_resource path="res://GameBoard/Grid.tres" type="Resource" id=8]
 [ext_resource path="res://GameBoard/Cursor/Cursor.tscn" type="PackedScene" id=11]
@@ -21,6 +22,7 @@ tile_data = PoolIntArray(  )
 [node name="Cursor" parent="." instance=ExtResource( 11 )]
 
 [node name="Characters" type="Node2D" parent="."]
+script = ExtResource( 2 )
 
 [node name="Action" type="Control" parent="."]
 __meta__ = {
@@ -45,6 +47,24 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Next Turn" type="Button" parent="Action"]
+margin_left = 1087.0
+margin_top = 102.0
+margin_right = 1264.0
+margin_bottom = 161.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource( 1 )
+disabled = true
+shortcut_in_tooltip = false
+text = "Next Turn"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="TurnOrder" type="Node2D" parent="."]
 script = ExtResource( 1 )
 
@@ -62,3 +82,4 @@ __meta__ = {
 [connection signal="accept_pressed" from="Cursor" to="." method="_on_Cursor_accept_pressed"]
 [connection signal="moved" from="Cursor" to="." method="_on_Cursor_moved"]
 [connection signal="pressed" from="Action/Attack" to="." method="_on_Attack_pressed"]
+[connection signal="pressed" from="Action/Next Turn" to="." method="_on_Attack_pressed"]

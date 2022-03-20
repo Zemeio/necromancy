@@ -15,9 +15,9 @@ var _targetable_cells := []
 
 onready var _unit_overlay: UnitOverlay = $UnitOverlay
 onready var _unit_path: UnitPath = $UnitPath
-onready var _characters = $Characters
-onready var _attack_button = $Action/Attack
-onready var _turn_order = $TurnOrder
+onready var _characters := $Characters
+onready var _attack_button := $Action/Attack
+onready var _turn_order: TurnOrder = $TurnOrder
 
 enum Action {
 	attack
@@ -74,7 +74,16 @@ func get_attackable_cells(unit: Unit, attack: Attack) -> Array:
 func _reinitialize() -> void:
 	_characters.initialize()
 	_turn_order.initialize(_characters.get_units())
+	start_first_turn()
 
+
+func start_first_turn():
+	var next_turn := _turn_order.current()
+	_characters.enter_turn(next_turn)
+	_enter_move_action_for_unit(next_turn)
+	# cursor.set_cell precisa ser chamado aqui
+	# Fim: turn_order.end_turn(wait)
+	pass
 
 ## Returns an array with all the coordinates of walkable cells based on the `max_distance`.
 func _flood_fill(cell: Vector2, max_distance: int, ignore_obstacles = false) -> Dictionary:

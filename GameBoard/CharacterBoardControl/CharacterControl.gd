@@ -60,7 +60,12 @@ func deselect_active_unit() -> void:
 func clear_active_unit() -> void:
 	# Map Control
 	_active_unit = null
-		
+
 func move_unit_to_cell(unit, cell):
 	_units.erase(unit.cell)
 	_units[cell] = unit
+
+
+func enter_turn(unit):
+	_active_unit = unit
+	_active_unit.is_selected = true
