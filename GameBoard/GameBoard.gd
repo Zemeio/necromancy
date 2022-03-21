@@ -37,7 +37,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		_characters.deselect_active_unit()
 		_unit_overlay.clear()
 		_unit_path.stop()
-		_characters.clear_active_unit()
 		_targetable_cells.clear()
 		selected_action = Action.nop
 		_attack_button.disabled = true
@@ -81,6 +80,7 @@ func start_first_turn():
 	var next_turn := _turn_order.current()
 	_characters.enter_turn(next_turn)
 	_enter_move_action_for_unit(next_turn)
+	
 	# cursor.set_cell precisa ser chamado aqui
 	# Fim: turn_order.end_turn(wait)
 	pass
@@ -152,7 +152,7 @@ func _move_unit(unit: Unit, new_cell: Vector2) -> void:
 ## Selects or moves a unit based on where the cursor is.
 func _on_Cursor_accept_pressed(cell: Vector2) -> void:
 	# Map Control
-	if not _characters.has_active_unit():
+	if not _characters.has_active_unit() or _characters.unit_once_cell_is_active(cell):
 		var selected_unit = _characters.select_unit_on_cell(cell)
 		if selected_unit != null:
 			_enter_move_action_for_unit(selected_unit)

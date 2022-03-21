@@ -69,3 +69,6 @@ func move_unit_to_cell(unit, cell):
 func enter_turn(unit):
 	_active_unit = unit
 	_active_unit.is_selected = true
+
+func unit_once_cell_is_active(cell) -> bool:
+	return has_active_unit() and has_unit_in_cell(cell) and get_active_unit() == _units[cell]
